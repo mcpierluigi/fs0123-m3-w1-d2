@@ -44,7 +44,7 @@ const BookList = (props) => {
               .filter((b) => b.title.toLowerCase().includes(searchQuery)) // se searchQuery è "" il filter ritorna tutto l'array così com'è,
               // se ha un valore !== "", il filter ritornerà solo gli elementi che includono i caratteri presenti nel this.state.searchQuery in quel momento
               .map((b) => (
-                <Col xs={12} md={3} key={b.asin}>
+                <Col xs={12} md={6} key={b.asin}>
                   <SingleBook
                     book={b} // b è l'oggetto libro vero e proprio passato come prop e accessibile all'interno di SingleBook come this.props.book
                     selectedBook={selectedBook} // selectedBook è l'ASIN passato come prop che verrà usato per determinare quale card si colorerà il bordo di rosso
