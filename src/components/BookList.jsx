@@ -3,18 +3,20 @@ import { Alert, Col, Form, Row } from "react-bootstrap";
 import CommentArea from "./CommentArea";
 import { useState } from "react";
 
-// state = {
-//   searchQuery: "",
-//   selectedBook: ""
-// };
-const BookList = props => {
+const BookList = (props) => {
+  /*
+  state = {
+    searchQuery: "",
+    selectedBook: ""
+  };
+*/
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedBook, setSelectedBook] = useState("");
+
   // questa funzione è passata a SingleBook come prop, cosicché la possa chiamare internamente al click della card, per salvare il riferimento ASIN della card cliccata
-  const changeSelectedBook = asin => {
-    this.setState({
-      selectedBook: asin
-    });
+
+  const changeSelectedBook = (asin) => {
+    setSelectedBook(asin);
   };
 
   return (
@@ -30,7 +32,7 @@ const BookList = props => {
               // leggo lo stato
               value={searchQuery}
               // setto lo stato ad ogni lettera inserita nell'input
-              onChange={e => setSearchQuery(e.target.value)}
+              onChange={(e) => setSearchQuery(e.target.value)}
             />
           </Form.Group>
         </Col>
@@ -38,10 +40,10 @@ const BookList = props => {
       <Row>
         <Col md={6}>
           <Row>
-            {this.props.books
-              .filter(b => b.title.toLowerCase().includes(searchQuery)) // se searchQuery è "" il filter ritorna tutto l'array così com'è,
+            {props.books
+              .filter((b) => b.title.toLowerCase().includes(searchQuery)) // se searchQuery è "" il filter ritorna tutto l'array così com'è,
               // se ha un valore !== "", il filter ritornerà solo gli elementi che includono i caratteri presenti nel this.state.searchQuery in quel momento
-              .map(b => (
+              .map((b) => (
                 <Col xs={12} md={3} key={b.asin}>
                   <SingleBook
                     book={b} // b è l'oggetto libro vero e proprio passato come prop e accessibile all'interno di SingleBook come this.props.book
@@ -53,7 +55,7 @@ const BookList = props => {
           </Row>
         </Col>
         <Col md={6}>
-          {this.state.selectedBook ? (
+          {selectedBook ? (
             // CommentArea sarà visibile solo dopo aver selezionato un libro, ovvero solo dopo che lo stato selectedBook cambia da "" all'ASIN di un libro
             <CommentArea asin={selectedBook} />
           ) : (
