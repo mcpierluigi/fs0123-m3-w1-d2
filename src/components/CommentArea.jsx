@@ -1,21 +1,19 @@
-import { Component } from "react";
 import CommentsList from "./CommentsList";
 import AddComment from "./AddComment";
+import { useState, useEffect } from "react";
 
-class CommentArea extends Component {
-  state = {
-    comments: []
-  };
-
+const CommentArea = props => {
+  // state = {
+  //   comments: []
+  // };
+  const [comments, setComments] = useState([]);
   // componentDidMount ora avverrà al primo montaggio del componente, cioè dopo la prima selezione di una card nella lista
-  componentDidMount() {
-    console.log("didMount()");
+  useEffect(() => {
+    fetchComments();
+  }, [props.asin]);
 
-    this.fetchComments();
-  }
-
-  // fetchComments viene chiamato in: componentDidMount, componentDidUpdate e anche dopo la post interna ad AddComment
-  fetchComments = async () => {
+  const fetchComments = async () => {
+    // fetchComments viene chiamato in: componentDidMount, componentDidUpdate e anche dopo la post interna ad AddComment
     try {
       const response = await fetch("https://striveschool-api.herokuapp.com/api/comments/" + this.props.asin, {
         headers: {
@@ -35,33 +33,14 @@ class CommentArea extends Component {
     }
   };
 
-  componentDidUpdate(prevProps, prevState) {
-    console.log("didUpdate()");
-
-    // controllo di guardia per rifare la fetch SOLO SE cambia la prop, non quando c'è un aggiornamento di stato
-    if (prevProps.asin !== this.props.asin) {
-      // in questo modo la lista dei commenti cambierà nel momento in cui selezioneremo un altra card, perché l'asin sarà cambiato dopo la nuova selezione
-      this.fetchComments();
-    } else {
-      console.log("componentDidUpdate but NO FETCH!");
-    }
-  }
-
-  componentWillUnmount() {
-    console.log("willUnmount()");
-  }
-
-  render() {
-    console.log("render()");
-    return (
-      <div>
-        {/* la prop fetchComments dà la possibilità ad AddComment di rifare la fetch e ottenere la lista di commenti aggiornati 
+  return (
+    <div>
+      {/* la prop fetchComments dà la possibilità ad AddComment di rifare la fetch e ottenere la lista di commenti aggiornati 
          che servirà poi a CommentList qua sotto per ricevere la nuova lista aggiornata, con anche l'ultimo appena inserito */}
-        <AddComment asin={this.props.asin} fetchComments={this.fetchComments} />
-        <CommentsList comments={this.state.comments} />
-      </div>
-    );
-  }
-}
+      <AddComment asin={props.asin} fetchComments={fetchComments} />
+      <CommentsList comments={comments} />
+    </div>
+  );
+};
 
 export default CommentArea;
